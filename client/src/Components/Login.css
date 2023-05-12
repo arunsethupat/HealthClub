@@ -1,0 +1,52 @@
+.login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-tab {
+    display: flex;
+  }
+  
+  .login-tab button {
+    padding: 10px;
+    margin: 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-tab button.active {
+    background-color: #ccc;
+  }
+  
+  .login-form {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+  }
+  
+  .login-form h2 {
+    margin-bottom: 20px;
+  }
+  
+  .login-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-form label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .login-form label input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
