@@ -44,7 +44,7 @@ function Login() {
           throw new Error('Failed to login');
         }
         console.log("Successful");
-        navigate('/memberPage');
+        navigate(`/memberPage?email=${email}`);
         // handle successful login here, e.g. redirect to a dashboard page
       })
       .catch(error => {
@@ -67,7 +67,13 @@ function Login() {
       email: email,
       password: password
     };
-  
+
+    //send login data to members page	
+    function sendLogin(){	
+      var b = document.getElementById('name').value,	
+          url = 'http://localhost:3000/MemberPage?name=' + encodeURIComponent(b);	
+      document.location.href = url;	
+  }
     // make a POST request to the server with the login data
     fetch('http://localhost:8082/loginAdmin', {
       method: 'POST', // specify the method as POST

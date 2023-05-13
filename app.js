@@ -273,6 +273,62 @@ app.post('/:memberId/enroll/:activityId', async (req, res) => {
   });
 
 
+  app.get('/findMemberId/:memberEmail', async (req, res) => {	
+    try {	
+      const emailId = req.params.memberEmail;	
+      var memberEmail = await Member.find({ email: emailId })	
+      // const email = req.params.memberEmail;	
+      // const memberData = await Member.findById(email).populate('_id')	
+      const memberIds = memberEmail.map((member) => member._id);	
+          
+      res.json(memberIds);	
+    } catch (err) {	
+      console.error(err);	
+      res.status(500).send('Server error');	
+    }	
+  });	
+  app.get('/memberProfile/:memberEmail', async (req, res) => {	
+    try {	
+      const emailId = req.params.memberEmail;	
+      var memberProfile = await Member.find({ email: emailId })	
+      const memberName = memberProfile.map((member) => member.name);	
+      const memberEmail = memberProfile.map((member) => member.email);	
+      const memberSD = memberProfile.map((member) => member.membership_start_date);	
+      const memberED = memberProfile.map((member) => member.membership_end_date);	
+      const memberData = {	
+        name: memberName,	
+        email: memberEmail,	
+        membership_start_date: memberSD,	
+        membership_end_date: memberED	
+      };	
+      console.log("Bhuvana " + memberData);	
+      // const email = req.params.memberEmail;	
+      // const memberData = await Member.findById(email).populate('_id')	
+          
+      res.json(memberData);	
+    } catch (err) {	
+      console.error(err);	
+      res.status(500).send('Server error');	
+    }	
+  });
+
+  	// this will list all the classes for one member	
+app.get('/listPerMember/:memberId', async (req, res) => {	
+    console.log("Inside this")	
+    try {	
+      const memberId = req.params.memberId;	
+      const member = await Member.findById(memberId);	
+        
+      const enrolledClasses = member.classes_enrolled;	
+      const classIds = enrolledClasses.map((classPerUser) => classPerUser._id);	
+        
+      const classData = await Class.find({ _id: { $in: classIds } });	
+      res.json(classData);	
+      } catch (error) {	
+        console.error(error);	
+        res.status(500).send('Failed to get class with enrolled members.');	
+      }	
+  });
 
 const port = process.env.PORT || 8082;
 
