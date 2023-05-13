@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router';
+import { Alert } from "react-bootstrap";
 
 
 function Login() {
   const [showMemberLogin, setShowMemberLogin] = useState(false);
   const navigate = useNavigate(); 
+  const [showAlert, setShowAlert] = useState(false);
 
   const toggleLoginForm = (isMember) => {
     setShowMemberLogin(isMember);
@@ -38,6 +40,7 @@ function Login() {
     })
       .then(response => {
         if (!response.ok) {
+          setShowAlert(true);
           throw new Error('Failed to login');
         }
         console.log("Successful");
@@ -75,6 +78,7 @@ function Login() {
     })
       .then(response => {
         if (!response.ok) {
+          setShowAlert(true);
           throw new Error('Failed to login');
         }
         console.log("Successful");
@@ -90,6 +94,11 @@ function Login() {
   const memberLoginForm = (
     
     <div className="login-form">
+      {showAlert && (
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          Invalid credentials
+        </Alert>
+      )}
       <h2>Member Login</h2>
       <form onSubmit={handleLoginSubmit}>
         <div className="form-group">
@@ -108,6 +117,11 @@ function Login() {
 
   const adminLoginForm = (
     <div className="login-form">
+      {showAlert && (
+        <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+          Invalid credentials
+        </Alert>
+      )}
       <h2>Admin Login</h2>
       <form onSubmit={handleLoginSubmitAdmin}>
         <div className="form-group">

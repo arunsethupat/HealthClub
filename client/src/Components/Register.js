@@ -9,6 +9,7 @@ function Register() {
   const [phone, setPhone] = useState('');
   const [membershipStartDate, setMembershipStartDate] = useState('');
   const [membershipEndDate, setMembershipEndDate] = useState('');
+  const [membershipPackage, setMembershipPackage] = useState('');
   const navigate = useNavigate(); 
 
   const handleSubmit = (event) => {
@@ -27,7 +28,7 @@ function Register() {
       body: JSON.stringify(formData)
     })
       .then((response) => response.json())
-      .then((data) => alert(data))
+      .then((data) => alert("Registration Successful"))
       .catch((error) => alert(error));
       navigate('/login');
 
@@ -60,6 +61,15 @@ function Register() {
         <span>Membership End Date:</span>
         <input type="date" value={membershipEndDate} onChange={(event) => setMembershipEndDate(event.target.value)} required />
       </label>
+      <label>
+    <span>Membership Package:</span>
+    <select value={membershipPackage} onChange={(event) => setMembershipPackage(event.target.value)}>
+      <option value="Free trial">Free trial</option>
+      <option value="Elite Package">Elite Package</option>
+      <option value="Pro Package">Pro Package</option>
+      <option value="Home Package">Home Package</option>
+    </select>
+  </label>
       <button type="submit">Sign Up</button>
     </form>
   );

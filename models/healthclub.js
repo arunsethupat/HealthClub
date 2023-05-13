@@ -33,6 +33,18 @@ const MemberSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'activity'
   }],
+  treadmill_hours: {
+    type: Number
+  },
+  cycling_hours: {
+    type: Number
+  },
+  stair_machine_hours: {
+    type: Number
+  },
+  weight_training_hours: {
+    type: Number
+  },
   created_date: {
     type: Date,
     default: Date.now
