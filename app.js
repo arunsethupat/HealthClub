@@ -148,6 +148,7 @@ app.get('/classes2/:classId', async (req, res) => {
     try {
         const classId = req.params.classId;
         const classData = await Class.findById(classId).populate('enrolled_members');
+        var isCheckedin = 0;
     
         const enrolledMembers = classData.enrolled_members;
         const memberIds = enrolledMembers.map((member) => member._id);
@@ -156,6 +157,11 @@ app.get('/classes2/:classId', async (req, res) => {
     
         const enrolledMembersData = enrolledMembers.map((member) => {
           const memberData = membersData.find((data) => data._id.equals(member._id));
+          const activities = memberData.activities;
+          const isEnrolledInClass = activities.includes(classId);
+          if (isEnrolledInClass) { isCheckedin = 1;}
+
+
           return {
             _id: memberData._id,
             name: memberData.name,
@@ -163,6 +169,8 @@ app.get('/classes2/:classId', async (req, res) => {
             phone: memberData.phone,
             membership_start_date: memberData.membership_start_date,
             membership_end_date: memberData.membership_end_date,
+            isCheckedin: isCheckedin
+            
           };
         });
     
