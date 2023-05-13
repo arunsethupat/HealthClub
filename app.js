@@ -214,6 +214,33 @@ app.post('/:memberId/activities/:activityId', async (req, res) => {
     }
   });
 
+  //delete activity
+  app.delete('/:memberId/activities/:activityId', async (req, res) => {
+    try {
+      console.log("Inside remove activity");
+      const memberId = req.params.memberId;
+      const activityId = req.params.activityId;
+  
+      const member = await Member.findById(memberId);
+      if (!member) {
+        return res.status(404).json({ message: 'Member not found' });
+      }
+  
+      const index = member.activities.indexOf(activityId);
+      if (index !== -1) {
+        member.activities.splice(index, 1);
+        await member.save();
+        res.status(200).json(member);
+      } else {
+        return res.status(404).json({ message: 'Activity not found in member activities' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+  
+
   //Add class_enrolled
 app.post('/:memberId/enroll/:activityId', async (req, res) => {
     try {
