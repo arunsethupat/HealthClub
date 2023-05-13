@@ -64,16 +64,16 @@ const ClassSchema = new mongoose.Schema({
     type: String
   },
   schedule: {
-    type: String,
+    type: Date,
     required: true
   },
   location: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.String,
     ref: 'location',
     required: true
   },
   instructor: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.String,
     ref: 'instructor',
     required: true
   },

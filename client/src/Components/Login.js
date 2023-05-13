@@ -88,6 +88,7 @@ function Login() {
   };
 
   const memberLoginForm = (
+    
     <div className="login-form">
       <h2>Member Login</h2>
       <form onSubmit={handleLoginSubmit}>
@@ -102,6 +103,7 @@ function Login() {
         <button type="submit" >Login</button>
       </form>
     </div>
+  
   );
 
   const adminLoginForm = (

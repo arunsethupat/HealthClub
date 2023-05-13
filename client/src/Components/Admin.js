@@ -3,12 +3,17 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import { useNavigate } from 'react-router';
 
+
+
 const Home = () => {
   const [members, setMembers] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [enrolledMembers, setEnrolledMembers] = useState([]);
+  const [showEnrolledMembers, setShowEnrolledMembers] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [showRegisterForm, setShowRegisterMembers] = useState(false);
   const [showClasses, setShowClasses] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +29,17 @@ const Home = () => {
   //     .then(data => setMembers(data))
   //     .catch(error => console.error(error));
   // }, []);
-        
+
+  const toggleClassMembersVisibility = (classId) => {
+    console.log(classId);
+    setShowEnrolledMembers(!showEnrolledMembers);
+    fetch(`http://localhost:8082/classes2/${classId}`)
+      .then(response => response.json())
+      .then(data => setEnrolledMembers(data.enrolled_members))
+      .catch(error => console.error(error));
+  };
+
+
   const toggleMembersVisibility = () => {
           setShowMembers(!showMembers);
           
@@ -83,8 +98,11 @@ const Home = () => {
         <button onClick={toggleMembersVisibility}>{showMembers ? 'Hide Members' : 'Show Members'}</button>
         <button onClick={toggleEnrollFormVisibility}>{showRegisterForm ? 'Hide Enroll Form' : 'Enroll Form'}</button>
         <button onClick={toggleListClassesVisibility}>{showClasses ? 'Hide Classes' : 'List Classes'}</button>
+        
+      
         {showMembers && (
-          <table>
+          <div class = "col-md-1" >
+          <table class="table-striped">
             <thead>
               <tr>
                 <th>Name</th>
@@ -104,8 +122,10 @@ const Home = () => {
               ))}
             </tbody>
           </table>
+          </div>
         )}
 {showClasses && (
+  <>
 <div>
       <h2>List of Classes</h2>
       {classes.map((classItem) => (
@@ -116,9 +136,34 @@ const Home = () => {
           <p>{classItem.location}</p>
           <p>{classItem.instructor}</p>
           <p>Enrolled Members: {classItem.enrolled_members.length}</p>
+          <p>Show Signed up members: <button onClick={() => toggleClassMembersVisibility(classItem._id)}>View</button></p>
         </div>
+
       ))}
+      
     </div>
+    {showEnrolledMembers &&(<table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Membership Start Date</th>
+            <th>Membership End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+              {enrolledMembers.map(enrolledMembers => (
+                <tr key={enrolledMembers._id}>
+                  <td>{enrolledMembers.name}</td>
+                  <td>{enrolledMembers.email}</td>
+                  <td>{enrolledMembers.membership_start_date}</td>
+                  <td>{enrolledMembers.membership_end_date}</td>
+                </tr>
+              ))}
+            </tbody>
+      </table>)}
+    </>
 )}
 
 {showRegisterForm && (

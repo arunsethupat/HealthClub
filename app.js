@@ -141,6 +141,48 @@ app.get('/classes', async (req, res) => {
       res.status(500).send('Server error');
     }
 });
+//classes/${classId}/enrolled-members
+app.get('/classes2/:classId', async (req, res) => {
+    console.log("Inside this")
+    try {
+        const classId = req.params.classId;
+        const classData = await Class.findById(classId).populate('enrolled_members');
+    
+        const enrolledMembers = classData.enrolled_members;
+        const memberIds = enrolledMembers.map((member) => member._id);
+    
+        const membersData = await Member.find({ _id: { $in: memberIds } });
+    
+        const enrolledMembersData = enrolledMembers.map((member) => {
+          const memberData = membersData.find((data) => data._id.equals(member._id));
+          return {
+            _id: memberData._id,
+            name: memberData.name,
+            email: memberData.email,
+            phone: memberData.phone,
+            membership_start_date: memberData.membership_start_date,
+            membership_end_date: memberData.membership_end_date,
+          };
+        });
+    
+        const classWithEnrolledMembers = {
+          _id: classData._id,
+          name: classData.name,
+          description: classData.description,
+          schedule: classData.schedule,
+          location: classData.location,
+          instructor: classData.instructor,
+          max_capacity: classData.max_capacity,
+          enrolled_members: enrolledMembersData,
+          created_date: classData.created_date,
+        };
+        res.json(classWithEnrolledMembers);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to get class with enrolled members.');
+      }
+});
+
 
 
 const port = process.env.PORT || 8082;
