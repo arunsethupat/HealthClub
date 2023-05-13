@@ -9,6 +9,7 @@ const {Admin} = require('./models/healthclub');
 const {Class} = require('./models/healthclub');
 const app = express();
 const connectDB = require('./config/db');
+const { Mongoose } = require('mongoose');
 
 connectDB();
 
@@ -182,6 +183,50 @@ app.get('/classes2/:classId', async (req, res) => {
         res.status(500).send('Failed to get class with enrolled members.');
       }
 });
+
+//Add activity
+app.post('/:memberId/activities/:activityId', async (req, res) => {
+    try {
+        console.log("Inside add activity");
+      const memberId = req.params.memberId;
+      const activityId = req.body.activityId;
+  
+      const member = await Member.findById(memberId);
+      if (!member) {
+        return res.status(404).json({ message: 'Member not found' });
+      }
+  
+      member.activities.push(activityId);
+      await member.save();
+  
+      res.status(200).json(member);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+
+  //Add class_enrolled
+app.post('/:memberId/enroll/:activityId', async (req, res) => {
+    try {
+        console.log("Inside add activity");
+      const memberId = req.params.memberId;
+      const activityId = req.body.activityId;
+  
+      const member = await Member.findById(memberId);
+      if (!member) {
+        return res.status(404).json({ message: 'Member not found' });
+      }
+  
+      member.classes_enrolled.push(activityId);
+      await member.save();
+  
+      res.status(200).json(member);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
 
 
 
