@@ -255,6 +255,15 @@ app.post('/:memberId/enroll/:activityId', async (req, res) => {
   
       member.classes_enrolled.push(activityId);
       await member.save();
+
+      //class
+      const className = await Class.findById(activityId);
+      if (!className) {
+        return res.status(404).json({ message: 'Class not found' });
+      }
+  
+      className.enrolled_members.push(memberId);
+      await className.save();
   
       res.status(200).json(member);
     } catch (error) {
